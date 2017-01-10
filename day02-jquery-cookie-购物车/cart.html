@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		table td{border:1px solid green;height:20px;}
+		.cut, .add{display: inline-block;width:30px;text-align: center;line-height: 20px;background:orange;}
+	</style>
+</head>
+<body>
+<div>
+	<table id="cart">
+		<tr class="first">
+			<td class="check"><label><input type="checkbox">全选</label></td>
+			<td class="id">编号</td>
+			<td class="name">商品名称</td>
+			<td class="price">商品价格/元</td>
+			<td class="num">数量</td>
+			<td class="total">小计/元</td>
+			<td class="move">操作</td>
+		</tr>
+		<tr style="display: none;" class="copy">
+			<td class="check"><label><input type="checkbox"></label></td>
+			<td class="id"></td>
+			<td class="name"></td>
+			<td class="price">0</td>
+			<td class="number">
+			<span class="cut">-</span>
+			<input type="text" class="num">
+			<span class="add">+</span>
+			</td>
+			<td class="total">0</td>
+			<td class="move"><a href="javascript:void(0)">删除</a></td>
+		</tr>
+	</table>
+	<div id="sum">合计：0.00元</div>
+</div>
+
+<script type="text/javascript" src="tools/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="tools/jquery.cookie.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//读取cookie中保存的商品信息
+		$.cookie.json = true;
+		var products = $.cookie("products") || [];
+		// console.log(products);
+
+		//克隆并显示商品
+		$.each(products, function(index, element){
+			$(".copy:last").clone(true)
+				.data("pro", element)
+				.children(".id").text(element.id).end()
+				.children(".name").text(element.name).end()
+				.children(".price").text(element.price).end()
+				.children(".number").children(".num").val(element.amount).end().end()//.find(".num").val(element.amount).end()
+				.children(".total").text((element.amount * element.price).toFixed(2)).end()
+				.show().appendTo("#cart");
+		});
+		//删除购物车中的商品
+		$(".copy").on("click", "a", function(){
+			if(confirm("是否删除商品？")){
+				var $row = $(this).parents(".copy");
+				var pro = $row.data("pro");
+				var index = $.inArray(pro, products);
+				// console.log(index); 
+				products.splice(index,1);
+				//保存更新cookie
+				$.cookie("products", products, {expires:7, path:"/"});
+				$row.remove();
+			}
+		});
+		//全选
+		$(".first :checkbox").on("click", function(){
+			var status = $(this).prop("checked");
+			$(".copy :checkbox").prop("checked", status);
+			total();
+		});
+		$(".copy :checkbox").on("click", function(){
+			$(".first :checkbox").prop("checked", "");
+			total();
+		});
+
+		//数量减
+		$(".copy").on("click", ".cut", function(){
+			var $amount = $(this).next();
+			var _amount = parseFloat($amount.val());
+			if(_amount<=1)
+				return;
+			$amount.val(--_amount);
+			console.log(_amount);
+			//对商品数量信息的更新
+			var pro = $(this).parents(".copy").data("pro");
+			pro.amount = _amount;
+			$.cookie("products", products, {expires:7, path:"/"});
+			//更新小计
+			$(this).parents(".copy").children(".total").text((_amount * pro.price).toFixed(2));
+			total();
+		});
+		//数量增
+		$(".copy").on("click", ".add", function(){
+			var $amount = $(this).prev();
+			var _amount = parseFloat($amount.val());
+				$amount.val(++_amount);
+			// console.log(_amount);
+			//对商品数量信息的更新
+			var pro = $(this).parents(".copy").data("pro");
+			pro.amount = _amount;
+			$.cookie("products", products, {expires:7, path:"/"});
+			//更新小计
+			$(this).parents(".copy").children(".total").text((_amount * pro.price).toFixed(2));
+
+			total();
+		});
+
+		//合计
+		function total(){
+			var $ckboxs = $(".copy :checkbox:checked");
+			var sum = 0;
+			$ckboxs.each(function(i,n){
+				sum += parseFloat($(n).parents(".copy").children(".total").text()).toFixed(2);
+			});
+			$("#sum").text("合计："+sum+"元");
+			console.log(sum);
+		}
+	});
+</script>
+</body>
+</html>

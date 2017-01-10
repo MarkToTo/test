@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		#box{width:200px;position: absolute;}
+		#box div{width:200px;height:20px;background:red;margin:5px 0;}
+		#container{display: block; width:200px;height:50px;background:green;position: absolute;}
+
+	</style>
+</head>
+<body>
+<div id="box">
+	<div></div>
+	<div></div>
+	段落1
+	<div></div>
+	段落2
+	<div></div>
+	
+</div>
+<button id="btn">关闭</button>
+<p id="container">container</p>
+
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	/*$("#container").click(function(){
+		$("#box").append("<div></div>");
+	});
+	//事件委派
+	$("#box").delegate("div", "click", function(){
+		alert("点击了div");
+	});*/
+
+	/*//on事件绑定
+	$("#box").on("click", "div", function(){
+		alert("点击");
+	});*/
+	/*$("#box").on("click mouseover", function(){
+		alert("触发事件");
+	});*/
+
+	//hover=enter、leave
+	/*$("#box").hover(function(){
+		console.log("enter");
+	}, function(){
+		console.log("leave");
+	});*/
+
+// 动画
+	//slide
+	/*$("#container").click(function(){
+		// $("#box").slideUp(1000);
+		// $("#box").slideDown(1000);
+		$("#box").slideToggle(1000);
+	});*/
+
+// 动画animate
+	$("#container").click(function(){
+		$("#box").animate({top:300, left:500}, 3000, function(){
+			// alert("运动结束");
+			$("#box").css("backgroundColor","pink");
+		}).delay(1000).animate({top:100, left:300}, 3000).animate({width:600}, 3000);
+		// alert("点击执行运动");
+	});
+
+	$("#btn").click(function(){
+		$("#box").stop();
+		// $("#box").stop(true);
+		// $("#box").stop(true, true);
+		// $("#box").finish();
+	});
+</script>
+</body>
+</html>

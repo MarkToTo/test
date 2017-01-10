@@ -1,0 +1,14 @@
+1.JS类库
+	jQuery
+	prototype.js
+	YUI
+	mooltools
+	extJS
+
+2.jQuery
+	$ <==> jQuery
+
+3.jQuery 对象
+	通常包装的是 DOM 元素到 jQuery 对象中
+
+	$() ==> jQuery 对象生产的工厂

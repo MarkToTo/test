@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>products</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		table td{border:1px solid green;}
+	</style>
+</head>
+<body>
+<div>
+	<table>
+		<tr>
+			<td>编号</td>
+			<td>商品名称</td>
+			<td>商品价格</td>
+			<td>商品操作</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>耳机</td>
+			<td>100</td>
+			<td><a href="javascript:void(0);">添加到购物车</a></td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>平板电脑</td>
+			<td>2000</td>
+			<td><a href="javascript:void(0);">添加到购物车</a></td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>手机</td>
+			<td>3000</td>
+			<td><a href="javascript:void(0);">添加到购物车</a></td>
+		</tr>
+	</table>
+	<a href="cart.html">查看购物车</a>
+</div>
+
+<script type="text/javascript" src="tools/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="tools/jquery.cookie.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//table事件委派给超链接
+		$("table").on("click", "a", function(){
+			var pros = $(this).parents("tr").children()
+			// console.log(pros);
+				,_id = pros.eq(0).text()
+				,_name = pros.eq(1).text()
+				,_price = pros.eq(2).text();
+			// console.log(_price);
+
+			//创建商品对象
+			var product = {
+				id : _id,
+				name : _name,
+				price : _price,
+				amount: 1
+			}
+			//cookie读取，并存入商品信息到数组中
+				//cookie-json数据转换
+				$.cookie.json = true;
+			var products = $.cookie("products") || [];
+			//如果购物车已存在该商品，则增加其数量
+			var i = index(_id, products);
+			if(i === -1){
+				products.push(product);
+			}else{
+				products[i].amount++;
+			}
+
+			//cookie保存商品信息
+			$.cookie("products", products,{expires:7,path:"/"});
+		});
+		//查找是否与购物车商品重复
+		function index(_id, products){
+			var index = -1;
+			$.each(products, function(i){
+				if(_id === this.id){
+					index = i;
+					return false;
+				}
+			});
+			return index;
+		}
+	});
+</script>
+</body>
+</html>

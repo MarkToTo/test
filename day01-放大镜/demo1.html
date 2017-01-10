@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		#box1{width:200px;height:50px;background:red;}
+		#box2{width:200px;height:30px;background:green;}
+	</style>
+</head>
+<body>
+<div id="box1">
+	<p>box1</p>
+	<!-- <img src="images/1.jpg"/> -->
+	<p style="display: none">ssss</p>
+</div>
+<div id="box2">
+	<p>box2</p>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	$(function(){
+		/*$("#box1").click(function(){
+			alert("aaa");
+		});
+		$("#box1").click(function(){
+			alert("bbb");
+		});*/
+
+		$("#box1").bind("click", function(){
+			alert("ccc");
+		});
+		$(window).bind("load", function(){
+			alert("loading....");
+		});
+		$("#box1").bind("myself", function(){
+			alert("myself");
+		});
+
+		$("#box1").mouseover(function(){
+			// $("#box1").trigger("myself");
+			$("#box1").click();
+		});
+	});
+	// console.log($("#box1"));
+	// console.log($("div")[0]);
+	// $("#box1").append("<div><p>sss</p></div>");
+	// console.log($("div")[1]);
+	// console.log($("img").attr("src"));
+	// ???? console.log($("#box1").attr("width"));
+	// $("#box1").attr({width:500,height:30});
+	// console.log($("p:hidden"));
+	// console.log($("p:visible"));
+</script>
+</body>
+</html>

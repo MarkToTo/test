@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	*{margin:0;padding:0;}
+		#box{width:200px;height:200px;position: absolute;margin-left:20px;}
+		#box img{width:100%;height:100%;}
+		#view{position: absolute;width: 80px;height:80px;opacity: 0.5;background:#ccc;top:0;left:0;display: none;}
+		#big{width:200px;height:200px;position: absolute;left:250px;top:0;overflow: hidden;display: none;}
+		#big img{position: absolute;}
+	</style>
+</head>
+<body>
+<div id="box">
+	<img src="images/img1.jpg"/>
+	<div id="view"></div>
+</div>
+<div id="big">
+	<img src="images/img1.jpg"/>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#box").mouseenter(function(e){
+			$("#view").css("display","block");
+			$("#big").css("display", "block");
+		});
+		$("#box").mouseleave(function(e){
+			$("#view").css("display","none");
+			$("#big").css("display", "none");
+		});
+
+		var viewWidth =parseInt($("#view").css("width")),
+				viewHeight = parseInt($("#view").css("height")),
+				boxWidth = parseInt($("#box").css("width")),
+				boxHeight = parseInt($("#box").css("height")),
+				scaleX = boxWidth / viewWidth,
+				scaleY = boxHeight / viewHeight,
+				// console.log(viewWidth);
+				aa = scaleX * boxWidth+ "px",
+				bb = scaleY * boxHeight+ "px";
+			//图片大小设置
+			$("#big img").css({"width":aa,"height":bb});
+		$("#box").mousemove(function(e){
+			var x = e.pageX,
+				y = e.pageY,
+				_top = y - (viewHeight / 2),
+				_left = x - (viewWidth / 2);
+			
+			$("#view").offset({top:_top, left:_left});
+			//获取镜头定位
+			var posit = $("#view").position(),
+			_left = posit.left,
+			_top = posit.top;
+
+			if(_top<0)
+				_top = 0;
+			if(_top>boxHeight-viewHeight)
+				_top = boxHeight-viewHeight;
+			if(_left<0)
+				_left = 0;
+			if(_left > boxWidth-viewWidth)
+				_left = boxWidth - viewWidth;
+			//镜头定位
+			$("#view").css({top:_top+"px", left:_left+"px"});
+			console.log(_top,_left);
+
+			var top = -_top * scaleY + "px",
+				left = - _left * scaleX + "px";
+			//放大镜定位
+			$("#big img").css({"top":top,"left": left});
+			// console.log(top,left);
+		});
+	});
+</script>
+</body>
+</html>

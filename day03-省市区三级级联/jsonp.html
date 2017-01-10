@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<button id="btn">按钮</button>
+	<input type="text" id="city">
+	<div id="info"></div>
+	<script type="text/javascript" src="lib/jQuery/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("#btn").on("click", function(){
+				var _city = $("#city").val();
+				/*$.getJSON("http://api.asilu.com/weather/?city=" + _city + "&callback=?", function(data){
+					console.log(data);
+				});*/
+				$.ajax({
+					url : "http://api.asilu.com/weather/?city=" + _city + "&callback=?",
+					dataType : "jsonp",
+					success : function(data){
+						console.log(data);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>
